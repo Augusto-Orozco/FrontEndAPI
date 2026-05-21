@@ -6,7 +6,7 @@ import Hola from './Views/Hola'
 import Login from './Views/Login'
 import { useEffect, useState } from 'react'
 
-const API_URL = "http://localhost:8000/api" 
+const API_URL = "https://api-production-7c6b.up.railway.app" 
 
 function AppContent({ login, user, users, delUser, addUser}) {
   const location = useLocation()
@@ -27,12 +27,13 @@ function AppContent({ login, user, users, delUser, addUser}) {
 
 function App() {
   const [isLogin, setIsLogin] = useState(false)
+  const [token, setToken] = useState("")
   const [user, setUser] = useState({})
   const [users, setUsers] = useState([])
   useEffect(() => {
     if (isLogin) {
       const getUsers = async () => {
-        const res = await fetch(API_URL + "/users")
+        const res = await fetch(API_URL + "/users", {headers:{authorization:token}})
         const data = await res.json()
         setUsers(data)
       }
@@ -54,7 +55,7 @@ function App() {
 
       setIsLogin(data.login)
       setUser(data.user)
-
+      setToken(data.token)
       return data
     } catch (error) {
       console.error(error)
@@ -63,16 +64,14 @@ function App() {
   }
   const delUser = async (id) => {
     setUsers(users.filter((u) => u._id !== id))
-    await fetch(API_URL + "/users/" + id, {
+    await fetch(API_URL + "/users/" + id, {headers:{authorization:token}},{
       method: "DELETE"
     })
   }
 const addUser = async (newUser) => {
   const res = await fetch(API_URL + "/users", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: {"Content-Type": "application/json", authorization:token},
     body: JSON.stringify(newUser)
   })
   const data = await res.json()
