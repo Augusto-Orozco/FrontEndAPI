@@ -5,7 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const User = ({ user, delUser }) => {
   return (
     <TableRow hover>
-      <TableCell sx={{ fontFamily: 'monospace' }}>{user._id}</TableCell>
+      <TableCell sx={{ fontFamily: 'monospace' }} Link to={"/users/" + user.id+"?react=899"} >{user._id}</TableCell>
       <TableCell sx={{ fontWeight: 'medium' }}>{user.name}</TableCell>
       <TableCell align="right">
         <Tooltip title="Eliminar usuario">
